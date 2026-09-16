@@ -121,7 +121,7 @@ const STORAGE_SESSION_KEY = "cybersuraksha_personnel_session";
 const STORAGE_REGISTERED_KEY = "cybersuraksha_registered_personnel";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<PersonnelUser | null>(DEMO_PROFILES.rawat);
+  const [user, setUser] = useState<PersonnelUser | null>(null);
   const [registeredAccounts, setRegisteredAccounts] = useState<PersonnelUser[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 

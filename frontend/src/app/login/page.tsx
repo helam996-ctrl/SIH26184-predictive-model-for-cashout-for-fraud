@@ -39,13 +39,17 @@ import {
 
 export default function GovernmentLoginPage() {
   const router = useRouter();
-  const { login, register, loginWithGoogle, isAuthenticated } = useAuth();
+  const { login, register, loginWithGoogle, isAuthenticated, user, logout } = useAuth();
 
+  // Only auto-redirect if returning from OAuth redirect with access_token in the URL hash
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
+    if (typeof window !== "undefined" && window.location.hash.includes("access_token")) {
+      const timer = setTimeout(() => {
+        router.push("/");
+      }, 500);
+      return () => clearTimeout(timer);
     }
-  }, [isAuthenticated, router]);
+  }, [router]);
 
   const [activeTab, setActiveTab] = useState<"sso" | "register">("sso");
   const [selectedLanguage, setSelectedLanguage] = useState<"EN" | "HI">("EN");
@@ -346,6 +350,37 @@ export default function GovernmentLoginPage() {
 
             {/* Form Body Container */}
             <div className="p-5">
+              {/* Active Session Notice if already logged in */}
+              {isAuthenticated && user && (
+                <div className="mb-4 p-3 bg-emerald-950/40 border border-emerald-500/40 rounded-xl flex items-center justify-between gap-3 shadow-lg">
+                  <div className="text-xs font-mono text-emerald-300 min-w-0">
+                    <div className="flex items-center gap-1.5 font-bold text-white truncate">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                      <span className="truncate">Active: {user.name}</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400 mt-0.5 truncate">
+                      {user.badgeId} • {user.agency}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => router.push("/")}
+                      className="px-2.5 py-1.5 text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-mono font-bold rounded-lg transition-colors cursor-pointer"
+                    >
+                      Dashboard →
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => logout()}
+                      className="px-2 py-1.5 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-300 font-mono rounded-lg transition-colors cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* TAB 1: OFFICIAL NATIONAL SSO SIGN IN */}
               {activeTab === "sso" && (
                 <form onSubmit={handleSsoSignIn} className="space-y-3.5">
