@@ -332,6 +332,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("[Supabase Login Query Error]:", err);
     }
 
+    // Fallback to authorized demo roster if offline or demo badge entered
+    const matchedProfile = Object.values(DEMO_PROFILES).find(
+      (p) =>
+        p.badgeId.toLowerCase() === query ||
+        p.email.toLowerCase() === query ||
+        p.govSsoId?.toLowerCase() === query
+    );
+    if (matchedProfile) {
+      saveSession(matchedProfile);
+      return { success: true };
+    }
+
     // Strict validation: Reject if user has not registered an account in database
     return {
       success: false,
