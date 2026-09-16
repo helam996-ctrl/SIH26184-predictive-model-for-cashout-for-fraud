@@ -12,7 +12,7 @@
 
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   EnrichedAlert,
   AlertStatus,
@@ -107,22 +107,25 @@ function OfficerPanelInner({
   const [isDispatching, setIsDispatching] = useState<boolean>(false);
   const [dispatchFeedback, setDispatchFeedback] = useState<string>("");
 
-  // Sync with selectedAlertId if triggered from Heatmap
-  React.useEffect(() => {
-    if (selectedAlertId) {
-      const target = alerts.find((a) => a.id === selectedAlertId);
-      if (target) {
-        setActiveModalAlert(target);
-        fetchBriefForAlert(target);
-      }
-    }
-  }, [selectedAlertId, alerts]);
+  // Cache AI briefs by alert ID to prevent regeneration loops on live feed ticks
+  const briefsCacheRef = useRef<Record<string, ForensicBriefResult>>({});
+  const lastBriefAlertIdRef = useRef<string | null>(null);
 
-  // Fetch AI Brief on demand
-  const fetchBriefForAlert = async (alert: EnrichedAlert) => {
+  // Fetch AI Brief on demand (cached per alert ID, only regenerates when force=true)
+  const fetchBriefForAlert = async (alert: EnrichedAlert, force: boolean = false) => {
+    if (!alert?.id) return;
+
+    // Return existing cached brief if available and not forcing regeneration
+    if (!force && briefsCacheRef.current[alert.id]) {
+      setAiBrief(briefsCacheRef.current[alert.id]);
+      setIsLoadingBrief(false);
+      return;
+    }
+
     setIsLoadingBrief(true);
     try {
       const res = await generateForensicBrief(alert);
+      briefsCacheRef.current[alert.id] = res;
       setAiBrief(res);
     } catch (err) {
       console.error("Error generating forensic brief:", err);
@@ -130,6 +133,20 @@ function OfficerPanelInner({
       setIsLoadingBrief(false);
     }
   };
+
+  // Sync with selectedAlertId ONLY when selectedAlertId changes to a NEW ID (not on every live feed tick)
+  React.useEffect(() => {
+    if (selectedAlertId && selectedAlertId !== lastBriefAlertIdRef.current) {
+      lastBriefAlertIdRef.current = selectedAlertId;
+      const target = alerts.find((a) => a.id === selectedAlertId);
+      if (target) {
+        setActiveModalAlert(target);
+        fetchBriefForAlert(target, false);
+      }
+    } else if (!selectedAlertId) {
+      lastBriefAlertIdRef.current = null;
+    }
+  }, [selectedAlertId]);
 
   // Filtered Alert List
   const filteredAlerts = useMemo(() => {
@@ -155,16 +172,18 @@ function OfficerPanelInner({
 
   // Handle open review modal
   const handleOpenReview = (alert: EnrichedAlert) => {
+    lastBriefAlertIdRef.current = alert.id;
     setActiveModalAlert(alert);
     setOfficerNotes(alert.officerNotes || "");
     setIsNoticeDraftOpen(false);
     setDispatchFeedback("");
-    fetchBriefForAlert(alert);
+    fetchBriefForAlert(alert, false);
     if (onSelectAlert) onSelectAlert(alert.id);
   };
 
   // Handle close review modal
   const handleCloseReview = () => {
+    lastBriefAlertIdRef.current = null;
     setActiveModalAlert(null);
     setIsNoticeDraftOpen(false);
     setDispatchFeedback("");
@@ -638,7 +657,7 @@ function OfficerPanelInner({
                       {aiBrief?.source === "gemini" ? "Google Gemini 3.6 Flash (Live)" : "AI Intelligence Brief"}
                     </span>
                     <button
-                      onClick={() => activeModalAlert && fetchBriefForAlert(activeModalAlert)}
+                      onClick={() => activeModalAlert && fetchBriefForAlert(activeModalAlert, true)}
                       disabled={isLoadingBrief}
                       className="text-[10px] font-mono text-sky-300 hover:text-white px-2.5 py-1 rounded bg-sky-900/40 hover:bg-sky-800/60 border border-sky-500/40 cursor-pointer flex items-center gap-1.5 transition-all disabled:opacity-50"
                       title="Regenerate case analysis using Google Gemini AI"
