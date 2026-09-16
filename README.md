@@ -1,7 +1,7 @@
 # 🛡️ CyberSuraksha (SIH 26184)
 ### *AI-Powered Real-Time Predictive ATM Cashout Interdiction & Automated Mule Account Freezing Platform*
 
-[![Smart India Hackathon](https://img.shields.io/badge/SIH-2024-orange.svg)](https://www.sih.gov.in/)
+[![Smart India Hackathon](https://img.shields.io/badge/SIH-2026-orange.svg)](https://www.sih.gov.in/)
 [![Problem Statement](https://img.shields.io/badge/PS_ID-26184-blue.svg)](https://www.sih.gov.in/)
 [![Next.js](https://img.shields.io/badge/Next.js-15.3-black.svg)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688.svg)](https://fastapi.tiangolo.com/)
