@@ -39,7 +39,13 @@ import {
 
 export default function GovernmentLoginPage() {
   const router = useRouter();
-  const { login, register, loginWithGoogle } = useAuth();
+  const { login, register, loginWithGoogle, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const [activeTab, setActiveTab] = useState<"sso" | "register">("sso");
   const [selectedLanguage, setSelectedLanguage] = useState<"EN" | "HI">("EN");

@@ -11,8 +11,30 @@ export async function GET(request: Request) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    return NextResponse.redirect(`${origin}/login?error=oauth_callback_failed`);
   }
 
-  // If something went wrong, send back to login with error
-  return NextResponse.redirect(`${origin}/login?error=oauth_callback_failed`);
+  // If no code is present (implicit grant with #access_token in URL hash),
+  // forward client-side to dashboard '/' where supabase-js handles the hash tokens.
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Authenticating...</title>
+  <script>
+    if (window.location.hash) {
+      window.location.replace("/" + window.location.hash);
+    } else {
+      window.location.replace("/");
+    }
+  </script>
+</head>
+<body style="background:#07090e;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+  <p>Authenticating National SSO &amp; Gov ID Session...</p>
+</body>
+</html>`;
+
+  return new Response(html, {
+    headers: { "Content-Type": "text/html" }
+  });
 }
