@@ -1,0 +1,541 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --grey-0: #07090e;
+    --grey-100: #0d111a;
+    --grey-200: #131926;
+    --grey-300: #1a2233;
+    --grey-400: #242f47;
+    --grey-500: #33415e;
+    --grey-700: #1b2436;
+    --grey-800: #475569;
+    --grey-900: #64748b;
+    --grey-1000: #94a3b8;
+    --grey-1100: #cbd5e1;
+    --grey-1200: #e2e8f0;
+    --grey-1300: #f1f5f9;
+    --grey-1400: #f8fafc;
+    --grey-1500: #ffffff;
+    --grey-1700: #ffffff;
+
+    --kalshi-green: #00d26a;
+    --kalshi-green-hover: #00b95c;
+    --kalshi-green-bg: rgba(0, 210, 106, 0.12);
+    --kalshi-green-border: rgba(0, 210, 106, 0.3);
+    --kalshi-red: #ff4557;
+    --kalshi-red-hover: #e03849;
+    --kalshi-red-bg: rgba(255, 69, 87, 0.12);
+    --kalshi-red-border: rgba(255, 69, 87, 0.3);
+    --kalshi-card-bg: #0d111a;
+    --kalshi-border: rgba(255, 255, 255, 0.08);
+
+    --blue-primary: #00a9e5;
+    --blue-link: #38bdf8;
+    --red-primary: #ff4557;
+    --amber-primary: #f59e0b;
+    --emerald-primary: #00d26a;
+    --purple-primary: #8b5cf6;
+
+    --small-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --x-small-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+
+    --background: var(--grey-0);
+    --foreground: var(--grey-1400);
+  }
+}
+
+html,
+body {
+  background-color: var(--grey-0);
+  color: var(--grey-1300);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: clip;
+}
+
+/* Eraser Hairline Grids */
+.hair {
+  display: grid;
+  gap: 1px;
+  background: var(--grey-700);
+  border: 1px solid var(--grey-700);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--small-shadow);
+}
+.hair > * {
+  background: var(--grey-0);
+}
+
+/* Eraser Bento Containers */
+.bento {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--grey-700);
+  border-radius: 12px;
+  background: var(--grey-0);
+  box-shadow: var(--small-shadow);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.bento:hover {
+  border-color: var(--grey-500);
+}
+
+/* Eraser Intersection Ticks */
+.tick {
+  position: absolute;
+  top: var(--y, 0);
+  left: var(--x, 0);
+  transform: translate(-50%, -50%);
+  padding: 1px 3px;
+  background: var(--grey-0);
+  color: var(--grey-800);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+}
+
+/* Eraser Hatched Fill */
+.hatched {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 7px,
+    var(--grey-300) 7px,
+    var(--grey-300) 8px
+  ), var(--grey-100);
+}
+
+/* Eraser Graph Paper Canvas */
+.graph {
+  background-color: var(--grey-0);
+  background-image: 
+    linear-gradient(var(--grey-700) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grey-700) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Eraser Pill Status Badges */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  font-family: ui-monospace, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.pill.brand {
+  color: var(--blue-primary);
+  background: color-mix(in srgb, var(--blue-primary) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--blue-primary) 32%, transparent);
+}
+.pill.danger {
+  color: var(--red-primary);
+  background: color-mix(in srgb, var(--red-primary) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--red-primary) 32%, transparent);
+}
+.pill.templates {
+  color: #a78bfa;
+  background: color-mix(in srgb, #a78bfa 14%, transparent);
+  border: 1px solid color-mix(in srgb, #a78bfa 32%, transparent);
+}
+.pill.agents {
+  color: var(--emerald-primary);
+  background: color-mix(in srgb, var(--emerald-primary) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--emerald-primary) 32%, transparent);
+}
+.pill.microsites {
+  color: var(--amber-primary);
+  background: color-mix(in srgb, var(--amber-primary) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--amber-primary) 32%, transparent);
+}
+.pill.neutral {
+  color: var(--grey-1000);
+  background: var(--grey-200);
+  border: 1px solid var(--grey-500);
+}
+
+/* Eraser Section Rule with Monospace Chip */
+.rule {
+  position: relative;
+  width: 100%;
+  height: 1px;
+  background: var(--grey-700);
+  margin: 20px 0;
+  z-index: 1;
+}
+.chip {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 16px;
+  background: var(--grey-0);
+  color: var(--grey-1000);
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 1px solid var(--grey-700);
+  border-radius: 9999px;
+  box-shadow: var(--x-small-shadow);
+}
+
+/* Eraser Ascii / Chevron Divider */
+.divider {
+  position: relative;
+  overflow: hidden;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--grey-700);
+  border-bottom: 1px solid var(--grey-700);
+  background: var(--grey-0);
+  color: var(--grey-800);
+  user-select: none;
+  margin: 16px 0;
+}
+.divider .row {
+  white-space: nowrap;
+  font-size: 16px;
+  letter-spacing: .32em;
+  line-height: 1;
+  opacity: .75;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+/* Eraser Tactile Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: 8px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all .15s ease;
+  font-family: ui-monospace, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  user-select: none;
+}
+.btn.default {
+  padding: 7px 14px;
+  font-size: 12px;
+}
+.btn.large {
+  padding: 9px 18px;
+  font-size: 13px;
+}
+.btn.dark {
+  border: 1px solid var(--grey-500);
+  background: var(--grey-1500);
+  color: var(--grey-0);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+.btn.dark:hover {
+  background: var(--grey-1300);
+  border-color: var(--grey-400);
+}
+.btn.light {
+  border: 1px solid var(--grey-500);
+  background: var(--grey-200);
+  color: var(--grey-1400);
+}
+.btn.light:hover {
+  background: var(--grey-300);
+  border-color: var(--grey-400);
+  color: #ffffff;
+}
+.btn.danger {
+  border: 1px solid var(--red-primary);
+  background: var(--red-primary);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(236, 44, 64, 0.4);
+}
+.btn.danger:hover {
+  background: #d62436;
+  box-shadow: 0 0 20px rgba(236, 44, 64, 0.6);
+}
+
+/* Eraser Technical Wells */
+.well {
+  border: 1px solid var(--grey-700);
+  border-radius: 8px;
+  background: var(--grey-100);
+  overflow: hidden;
+}
+
+/* Custom Cyber Radar & Pulsing Animations */
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(236, 44, 64, 0.7);
+  }
+  70% {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 14px rgba(236, 44, 64, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(236, 44, 64, 0);
+  }
+}
+
+.radar-sweep-effect {
+  animation: radar-sweep 4s linear infinite;
+}
+
+.pulse-target-red {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Leaflet Styling (Tactical Eraser Dark) */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: var(--grey-100) !important;
+  border-radius: 8px;
+  isolation: isolate !important;
+  z-index: 0 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--grey-200) !important;
+  color: var(--grey-1400) !important;
+  border: 1px solid var(--grey-500) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--small-shadow) !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--grey-200) !important;
+  border: 1px solid var(--grey-500) !important;
+}
+
+.leaflet-bar {
+  border: 1px solid var(--grey-700) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: var(--small-shadow) !important;
+}
+
+.leaflet-bar a {
+  background-color: var(--grey-100) !important;
+  color: var(--blue-primary) !important;
+  border-bottom: 1px solid var(--grey-700) !important;
+  transition: all 0.2s ease !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--grey-300) !important;
+  color: var(--grey-1500) !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(8, 9, 13, 0.9) !important;
+  color: var(--grey-900) !important;
+  font-family: ui-monospace, Menlo, monospace !important;
+  font-size: 9px !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--blue-primary) !important;
+}
+
+/* OSM Dark Mode Filter — inverts tile colors to dark tactical aesthetic, no API key needed */
+.osm-dark-tiles {
+  filter: invert(100%) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.8);
+}
+
+/* Keep markers and overlays unaffected by the tile filter */
+.leaflet-pane.leaflet-marker-pane,
+.leaflet-pane.leaflet-overlay-pane,
+.leaflet-pane.leaflet-shadow-pane,
+.leaflet-pane.leaflet-tooltip-pane,
+.leaflet-pane.leaflet-popup-pane,
+.leaflet-control {
+  filter: none !important;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--grey-0);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--grey-400);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-500);
+}
+
+/* Kalshi-Style Prediction Market Aesthetics */
+.kalshi-card {
+  background: var(--kalshi-card-bg);
+  border: 1px solid var(--kalshi-border);
+  border-radius: 12px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kalshi-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.kalshi-btn-yes {
+  background-color: var(--kalshi-green);
+  color: #05140b;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  box-shadow: 0 0 16px rgba(0, 210, 106, 0.25);
+}
+
+.kalshi-btn-yes:hover {
+  background-color: var(--kalshi-green-hover);
+  box-shadow: 0 0 22px rgba(0, 210, 106, 0.4);
+  transform: translateY(-1px);
+}
+
+.kalshi-btn-no {
+  background-color: rgba(255, 69, 87, 0.12);
+  color: #ff4557;
+  border: 1px solid rgba(255, 69, 87, 0.3);
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.kalshi-btn-no:hover {
+  background-color: rgba(255, 69, 87, 0.2);
+  border-color: rgba(255, 69, 87, 0.5);
+  transform: translateY(-1px);
+}
+
+.kalshi-btn-secondary {
+  background-color: var(--grey-200);
+  color: var(--grey-1300);
+  border: 1px solid var(--grey-700);
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.kalshi-btn-secondary:hover {
+  background-color: var(--grey-300);
+  border-color: var(--grey-500);
+  color: #ffffff;
+}
+
+.kalshi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kalshi-badge-live {
+  background: rgba(0, 210, 106, 0.12);
+  color: var(--kalshi-green);
+  border: 1px solid rgba(0, 210, 106, 0.3);
+}
+
+.kalshi-badge-danger {
+  background: rgba(255, 69, 87, 0.12);
+  color: var(--kalshi-red);
+  border: 1px solid rgba(255, 69, 87, 0.3);
+}
+
+/* ==========================================================================
+   Government of India & National Single Sign-On (NSSO) Design Standards
+   ========================================================================== */
+
+.tricolor-strip {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%, #138808 100%);
+}
+
+.tricolor-strip-thin {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%, #138808 100%);
+}
+
+.gov-panel {
+  background: radial-gradient(120% 120% at 50% 0%, #101726 0%, #080c14 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+}
+
+.gov-badge-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(19, 136, 8, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.captcha-display {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  color: #38bdf8;
+  background: repeating-linear-gradient(
+    45deg,
+    #0c1424,
+    #0c1424 10px,
+    #131d33 10px,
+    #131d33 20px
+  );
+  border: 1px dashed rgba(56, 189, 248, 0.4);
+  user-select: none;
+}
+
